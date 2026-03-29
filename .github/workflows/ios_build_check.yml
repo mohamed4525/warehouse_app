@@ -1,0 +1,22 @@
+name: iOS Compatibility Check
+on:
+  push:
+    branches: [ "main" ] # يشتغل أول ما ترفع أي تعديل
+
+jobs:
+  check-ios:
+    runs-on: macos-latest # هنا بنحجز جهاز الماك المجاني
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.6' # نفس نسختك بالضبط
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build iOS (Check-only)
+        run: flutter build ios --no-codesign # بيتأكد إن كل ملفات الـ iOS اللي عدلناها سليمة
